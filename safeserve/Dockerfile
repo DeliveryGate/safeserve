@@ -6,17 +6,18 @@ WORKDIR /app
 COPY safeserve/package*.json ./
 RUN npm install --production
 
-# Copy and install web dependencies
+# Copy and install web dependencies (includes @prisma/client)
 COPY safeserve/web/package*.json ./web/
 RUN cd web && npm install --production
 
-# Copy Prisma schema and generate client
+# Copy Prisma schema and generate client INTO web/node_modules
+# (web/index.js imports from web/node_modules/@prisma/client)
 COPY safeserve/prisma ./prisma
-RUN npx prisma generate --schema=prisma/schema.prisma
+RUN cd web && npx prisma generate --schema=../prisma/schema.prisma
 
 # Copy all application code
 COPY safeserve/ .
 
 EXPOSE 3000
 
-CMD npx prisma db push --schema=prisma/schema.prisma --skip-generate && cd web && node index.js
+CMD cd web && npx prisma db push --schema=../prisma/schema.prisma --skip-generate && node index.js

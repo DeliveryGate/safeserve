@@ -1,5 +1,8 @@
 FROM node:18-alpine
 
+# Install OpenSSL so Prisma can detect it at runtime
+RUN apk add --no-cache openssl
+
 WORKDIR /app
 
 # Copy and install root (safeserve) dependencies
@@ -20,4 +23,5 @@ COPY safeserve/ .
 
 EXPOSE 3000
 
+# Use DIRECT_URL for db push (bypasses connection pooler), then start server (uses DATABASE_URL)
 CMD cd web && npx prisma db push --schema=../prisma/schema.prisma --skip-generate && node index.js

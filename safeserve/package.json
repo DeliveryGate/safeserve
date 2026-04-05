@@ -1,0 +1,18 @@
+{
+  "name": "safeserve",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SafeServe — Allergen and Dietary Labels for Shopify",
+  "scripts": {
+    "dev": "shopify app dev",
+    "deploy": "shopify app deploy",
+    "setup-metafields": "node scripts/setup-metafields.js",
+    "seed": "node scripts/seed-test-data.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

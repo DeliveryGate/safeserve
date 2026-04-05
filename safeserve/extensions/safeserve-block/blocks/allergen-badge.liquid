@@ -1,0 +1,174 @@
+{% assign allergens = product.metafields.safeserve.allergens.value %}
+{% assign dietary = product.metafields.safeserve.dietary.value %}
+
+{% if allergens %}
+<div
+  class="safeserve-allergens safeserve-badge-style--{{ block.settings.badge_style }}"
+  style="
+    --safeserve-warning: {{ block.settings.warning_colour }};
+    --safeserve-safe: {{ block.settings.safe_colour }};
+  "
+>
+  <h4 class="safeserve-title">Allergen Information</h4>
+  <div class="safeserve-badge-grid">
+
+    {% comment %} Celery {% endcomment %}
+    {% if allergens.celery %}
+      <span class="safeserve-badge safeserve-badge--warning">Contains Celery</span>
+    {% else %}
+      <span class="safeserve-badge safeserve-badge--safe">Celery Free</span>
+    {% endif %}
+
+    {% comment %} Gluten {% endcomment %}
+    {% if allergens.gluten %}
+      <span class="safeserve-badge safeserve-badge--warning">Contains Gluten</span>
+    {% else %}
+      <span class="safeserve-badge safeserve-badge--safe">Gluten Free</span>
+    {% endif %}
+
+    {% comment %} Crustaceans {% endcomment %}
+    {% if allergens.crustaceans %}
+      <span class="safeserve-badge safeserve-badge--warning">Contains Crustaceans</span>
+    {% else %}
+      <span class="safeserve-badge safeserve-badge--safe">Crustacean Free</span>
+    {% endif %}
+
+    {% comment %} Eggs {% endcomment %}
+    {% if allergens.eggs %}
+      <span class="safeserve-badge safeserve-badge--warning">Contains Eggs</span>
+    {% else %}
+      <span class="safeserve-badge safeserve-badge--safe">Egg Free</span>
+    {% endif %}
+
+    {% comment %} Fish {% endcomment %}
+    {% if allergens.fish %}
+      <span class="safeserve-badge safeserve-badge--warning">Contains Fish</span>
+    {% else %}
+      <span class="safeserve-badge safeserve-badge--safe">Fish Free</span>
+    {% endif %}
+
+    {% comment %} Lupin {% endcomment %}
+    {% if allergens.lupin %}
+      <span class="safeserve-badge safeserve-badge--warning">Contains Lupin</span>
+    {% else %}
+      <span class="safeserve-badge safeserve-badge--safe">Lupin Free</span>
+    {% endif %}
+
+    {% comment %} Milk {% endcomment %}
+    {% if allergens.milk %}
+      <span class="safeserve-badge safeserve-badge--warning">Contains Milk</span>
+    {% else %}
+      <span class="safeserve-badge safeserve-badge--safe">Milk Free</span>
+    {% endif %}
+
+    {% comment %} Molluscs {% endcomment %}
+    {% if allergens.molluscs %}
+      <span class="safeserve-badge safeserve-badge--warning">Contains Molluscs</span>
+    {% else %}
+      <span class="safeserve-badge safeserve-badge--safe">Mollusc Free</span>
+    {% endif %}
+
+    {% comment %} Mustard {% endcomment %}
+    {% if allergens.mustard %}
+      <span class="safeserve-badge safeserve-badge--warning">Contains Mustard</span>
+    {% else %}
+      <span class="safeserve-badge safeserve-badge--safe">Mustard Free</span>
+    {% endif %}
+
+    {% comment %} Nuts {% endcomment %}
+    {% if allergens.nuts %}
+      <span class="safeserve-badge safeserve-badge--warning">Contains Nuts</span>
+    {% else %}
+      <span class="safeserve-badge safeserve-badge--safe">Nut Free</span>
+    {% endif %}
+
+    {% comment %} Peanuts {% endcomment %}
+    {% if allergens.peanuts %}
+      <span class="safeserve-badge safeserve-badge--warning">Contains Peanuts</span>
+    {% else %}
+      <span class="safeserve-badge safeserve-badge--safe">Peanut Free</span>
+    {% endif %}
+
+    {% comment %} Sesame {% endcomment %}
+    {% if allergens.sesame %}
+      <span class="safeserve-badge safeserve-badge--warning">Contains Sesame</span>
+    {% else %}
+      <span class="safeserve-badge safeserve-badge--safe">Sesame Free</span>
+    {% endif %}
+
+    {% comment %} Soya {% endcomment %}
+    {% if allergens.soya %}
+      <span class="safeserve-badge safeserve-badge--warning">Contains Soya</span>
+    {% else %}
+      <span class="safeserve-badge safeserve-badge--safe">Soya Free</span>
+    {% endif %}
+
+    {% comment %} Sulphites {% endcomment %}
+    {% if allergens.sulphites %}
+      <span class="safeserve-badge safeserve-badge--warning">Contains Sulphites</span>
+    {% else %}
+      <span class="safeserve-badge safeserve-badge--safe">Sulphite Free</span>
+    {% endif %}
+
+  </div>
+
+  {% if block.settings.show_dietary and dietary %}
+  <div class="safeserve-dietary">
+    <h5 class="safeserve-dietary-title">Dietary Information</h5>
+    <div class="safeserve-cert-grid">
+      {% if dietary.halal %}<span class="safeserve-cert safeserve-cert--halal">Halal Certified</span>{% endif %}
+      {% if dietary.kosher %}<span class="safeserve-cert safeserve-cert--kosher">Kosher</span>{% endif %}
+      {% if dietary.vegan %}<span class="safeserve-cert safeserve-cert--vegan">Vegan</span>{% endif %}
+      {% if dietary.vegetarian %}<span class="safeserve-cert safeserve-cert--vegetarian">Vegetarian</span>{% endif %}
+      {% if dietary.gluten_free %}<span class="safeserve-cert safeserve-cert--gluten-free">Gluten-Free</span>{% endif %}
+      {% if dietary.nut_free %}<span class="safeserve-cert safeserve-cert--nut-free">Nut-Free</span>{% endif %}
+      {% if dietary.dairy_free %}<span class="safeserve-cert safeserve-cert--dairy-free">Dairy-Free</span>{% endif %}
+      {% if dietary.keto %}<span class="safeserve-cert safeserve-cert--keto">Keto</span>{% endif %}
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Allergen Badge",
+  "target": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "badge_style",
+      "label": "Badge style",
+      "options": [
+        { "value": "pill", "label": "Pill" },
+        { "value": "square", "label": "Square" }
+      ],
+      "default": "pill"
+    },
+    {
+      "type": "color",
+      "id": "warning_colour",
+      "label": "Warning colour",
+      "default": "#FF4444"
+    },
+    {
+      "type": "color",
+      "id": "safe_colour",
+      "label": "Safe colour",
+      "default": "#22C55E"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dietary",
+      "label": "Show dietary certifications",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Allergen Badge"
+    }
+  ]
+}
+{% endschema %}

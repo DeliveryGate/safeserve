@@ -1,0 +1,160 @@
+{% comment %}
+  SafeServe Dietary Filter Block
+  Renders a filter bar on collection pages.
+  Products must have tags in the format "dietary-halal", "dietary-vegan", etc.
+  to be filterable.
+{% endcomment %}
+
+<div class="safeserve-filter" id="safeserve-filter-{{ block.id }}">
+  <div class="safeserve-filter__bar" role="group" aria-label="Filter by dietary requirement">
+    <button
+      class="safeserve-filter__btn safeserve-filter__btn--active"
+      data-filter="all"
+      aria-pressed="true"
+    >
+      All
+    </button>
+    <button
+      class="safeserve-filter__btn"
+      data-filter="dietary-vegan"
+      aria-pressed="false"
+    >
+      Vegan
+    </button>
+    <button
+      class="safeserve-filter__btn"
+      data-filter="dietary-vegetarian"
+      aria-pressed="false"
+    >
+      Vegetarian
+    </button>
+    <button
+      class="safeserve-filter__btn"
+      data-filter="dietary-gluten-free"
+      aria-pressed="false"
+    >
+      Gluten-Free
+    </button>
+    <button
+      class="safeserve-filter__btn"
+      data-filter="dietary-halal"
+      aria-pressed="false"
+    >
+      Halal
+    </button>
+    <button
+      class="safeserve-filter__btn"
+      data-filter="dietary-nut-free"
+      aria-pressed="false"
+    >
+      Nut-Free
+    </button>
+    <button
+      class="safeserve-filter__btn"
+      data-filter="dietary-dairy-free"
+      aria-pressed="false"
+    >
+      Dairy-Free
+    </button>
+  </div>
+
+  <p class="safeserve-filter__no-results" id="safeserve-no-results-{{ block.id }}" aria-live="polite" hidden>
+    No products match this dietary filter.
+  </p>
+</div>
+
+<script>
+(function() {
+  var filterId = {{ block.id | json }};
+  var filterEl = document.getElementById('safeserve-filter-' + filterId);
+  if (!filterEl) return;
+
+  var noResults = document.getElementById('safeserve-no-results-' + filterId);
+  var buttons = filterEl.querySelectorAll('.safeserve-filter__btn');
+  var activeFilter = 'all';
+  var debounceTimer = null;
+
+  function getProductCards() {
+    // Support Dawn, Debut, and common theme product grid selectors
+    var selectors = [
+      '.product-grid .product-grid-item',
+      '.product-grid .grid__item',
+      '.collection .product-item',
+      '.collection-grid .product-card-wrapper',
+      'li[data-product-id]',
+      '.products-grid .item'
+    ];
+    for (var i = 0; i < selectors.length; i++) {
+      var cards = document.querySelectorAll(selectors[i]);
+      if (cards.length > 0) return Array.prototype.slice.call(cards);
+    }
+    return [];
+  }
+
+  function applyFilter(filter) {
+    var cards = getProductCards();
+    var visibleCount = 0;
+
+    cards.forEach(function(card) {
+      var tags = (card.dataset.tags || card.getAttribute('data-product-tags') || '').toLowerCase();
+      var shouldShow = filter === 'all' || tags.indexOf(filter) !== -1;
+
+      if (shouldShow) {
+        card.style.display = '';
+        card.setAttribute('aria-hidden', 'false');
+        card.classList.remove('safeserve-hidden');
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+        card.setAttribute('aria-hidden', 'true');
+        card.classList.add('safeserve-hidden');
+      }
+    });
+
+    if (noResults) {
+      if (visibleCount === 0 && filter !== 'all') {
+        noResults.removeAttribute('hidden');
+      } else {
+        noResults.setAttribute('hidden', '');
+      }
+    }
+  }
+
+  function onFilterClick(e) {
+    var btn = e.currentTarget;
+    var filter = btn.dataset.filter;
+    if (filter === activeFilter) return;
+
+    activeFilter = filter;
+
+    buttons.forEach(function(b) {
+      b.classList.remove('safeserve-filter__btn--active');
+      b.setAttribute('aria-pressed', 'false');
+    });
+    btn.classList.add('safeserve-filter__btn--active');
+    btn.setAttribute('aria-pressed', 'true');
+
+    if (debounceTimer) clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function() {
+      applyFilter(filter);
+    }, 50);
+  }
+
+  buttons.forEach(function(btn) {
+    btn.addEventListener('click', onFilterClick);
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Dietary Filter",
+  "target": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Dietary Filter Bar"
+    }
+  ]
+}
+{% endschema %}

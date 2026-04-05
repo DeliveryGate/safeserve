@@ -1,0 +1,208 @@
+{% assign nutrition = product.metafields.safeserve.nutrition.value %}
+{% assign nutrition_format = product.metafields.safeserve.nutrition_format.value | default: 'fda' %}
+{% assign display_format = block.settings.format | default: nutrition_format %}
+
+{% if nutrition %}
+
+{% if display_format == 'fda' %}
+{%- comment -%} FDA Nutrition Facts Panel {%- endcomment -%}
+<div class="safeserve-nutrition safeserve-nutrition--fda">
+  <div class="safeserve-nutrition__header">
+    <h2 class="safeserve-nutrition__title">Nutrition Facts</h2>
+    {% if nutrition.servings_per_container %}
+    <p class="safeserve-nutrition__servings">{{ nutrition.servings_per_container }} servings per container</p>
+    {% endif %}
+    <div class="safeserve-nutrition__serving-size">
+      <span>Serving size</span>
+      <span>{{ nutrition.serving_size | default: '1 serving' }}</span>
+    </div>
+  </div>
+
+  <div class="safeserve-nutrition__calories-bar">
+    <div class="safeserve-nutrition__calories-label">Calories</div>
+    <div class="safeserve-nutrition__calories-value">{{ nutrition.calories | default: 0 }}</div>
+  </div>
+
+  <div class="safeserve-nutrition__divider safeserve-nutrition__divider--thin"></div>
+  <p class="safeserve-nutrition__dv-header">% Daily Value*</p>
+
+  <div class="safeserve-nutrition__row safeserve-nutrition__row--bold">
+    <span><strong>Total Fat</strong> {{ nutrition.total_fat | default: 0 }}g</span>
+    {% if block.settings.show_daily_values and nutrition.total_fat_dv %}<span>{{ nutrition.total_fat_dv }}%</span>{% endif %}
+  </div>
+  <div class="safeserve-nutrition__row safeserve-nutrition__row--indent">
+    <span>Saturated Fat {{ nutrition.saturated_fat | default: 0 }}g</span>
+    {% if block.settings.show_daily_values and nutrition.saturated_fat_dv %}<span>{{ nutrition.saturated_fat_dv }}%</span>{% endif %}
+  </div>
+  <div class="safeserve-nutrition__row safeserve-nutrition__row--indent">
+    <span><em>Trans</em> Fat {{ nutrition.trans_fat | default: 0 }}g</span>
+  </div>
+
+  <div class="safeserve-nutrition__row safeserve-nutrition__row--bold">
+    <span><strong>Cholesterol</strong> {{ nutrition.cholesterol | default: 0 }}mg</span>
+    {% if block.settings.show_daily_values and nutrition.cholesterol_dv %}<span>{{ nutrition.cholesterol_dv }}%</span>{% endif %}
+  </div>
+
+  <div class="safeserve-nutrition__row safeserve-nutrition__row--bold">
+    <span><strong>Sodium</strong> {{ nutrition.sodium | default: 0 }}mg</span>
+    {% if block.settings.show_daily_values and nutrition.sodium_dv %}<span>{{ nutrition.sodium_dv }}%</span>{% endif %}
+  </div>
+
+  <div class="safeserve-nutrition__row safeserve-nutrition__row--bold">
+    <span><strong>Total Carbohydrate</strong> {{ nutrition.total_carbohydrate | default: 0 }}g</span>
+    {% if block.settings.show_daily_values and nutrition.total_carbohydrate_dv %}<span>{{ nutrition.total_carbohydrate_dv }}%</span>{% endif %}
+  </div>
+  <div class="safeserve-nutrition__row safeserve-nutrition__row--indent">
+    <span>Dietary Fiber {{ nutrition.dietary_fiber | default: 0 }}g</span>
+    {% if block.settings.show_daily_values and nutrition.dietary_fiber_dv %}<span>{{ nutrition.dietary_fiber_dv }}%</span>{% endif %}
+  </div>
+  <div class="safeserve-nutrition__row safeserve-nutrition__row--indent">
+    <span>Total Sugars {{ nutrition.total_sugars | default: 0 }}g</span>
+  </div>
+  {% if nutrition.added_sugars %}
+  <div class="safeserve-nutrition__row safeserve-nutrition__row--indent-2">
+    <span>Includes {{ nutrition.added_sugars }}g Added Sugars</span>
+    {% if block.settings.show_daily_values and nutrition.added_sugars_dv %}<span>{{ nutrition.added_sugars_dv }}%</span>{% endif %}
+  </div>
+  {% endif %}
+
+  <div class="safeserve-nutrition__row safeserve-nutrition__row--bold">
+    <span><strong>Protein</strong> {{ nutrition.protein | default: 0 }}g</span>
+  </div>
+
+  <div class="safeserve-nutrition__divider safeserve-nutrition__divider--thick"></div>
+
+  {% if block.settings.show_daily_values %}
+  <div class="safeserve-nutrition__micronutrients">
+    {% if nutrition.vitamin_d %}
+    <div class="safeserve-nutrition__row">
+      <span>Vitamin D {{ nutrition.vitamin_d }}mcg</span>
+      {% if nutrition.vitamin_d_dv %}<span>{{ nutrition.vitamin_d_dv }}%</span>{% endif %}
+    </div>
+    {% endif %}
+    {% if nutrition.calcium %}
+    <div class="safeserve-nutrition__row">
+      <span>Calcium {{ nutrition.calcium }}mg</span>
+      {% if nutrition.calcium_dv %}<span>{{ nutrition.calcium_dv }}%</span>{% endif %}
+    </div>
+    {% endif %}
+    {% if nutrition.iron %}
+    <div class="safeserve-nutrition__row">
+      <span>Iron {{ nutrition.iron }}mg</span>
+      {% if nutrition.iron_dv %}<span>{{ nutrition.iron_dv }}%</span>{% endif %}
+    </div>
+    {% endif %}
+    {% if nutrition.potassium %}
+    <div class="safeserve-nutrition__row">
+      <span>Potassium {{ nutrition.potassium }}mg</span>
+      {% if nutrition.potassium_dv %}<span>{{ nutrition.potassium_dv }}%</span>{% endif %}
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="safeserve-nutrition__footnote">
+    *The % Daily Value tells you how much a nutrient in a serving of food contributes to a daily diet. 2,000 calories a day is used for general nutrition advice.
+  </div>
+  {% endif %}
+</div>
+
+{% else %}
+{%- comment -%} EU Nutrition Information Table {%- endcomment -%}
+<div class="safeserve-nutrition safeserve-nutrition--eu">
+  <h3 class="safeserve-nutrition__title">Nutrition Information</h3>
+  <table class="safeserve-nutrition__table">
+    <thead>
+      <tr>
+        <th>Typical values</th>
+        <th>Per 100g</th>
+        {% if nutrition.serving_size %}<th>Per {{ nutrition.serving_size }}</th>{% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Energy</td>
+        <td>
+          {{ nutrition.energy_kj | default: 0 }}kJ /
+          {{ nutrition.energy_kcal | default: nutrition.calories | default: 0 }}kcal
+        </td>
+        {% if nutrition.serving_size %}
+        <td>
+          {{ nutrition.energy_kj_serving | default: '-' }}kJ /
+          {{ nutrition.energy_kcal_serving | default: '-' }}kcal
+        </td>
+        {% endif %}
+      </tr>
+      <tr>
+        <td><strong>Fat</strong></td>
+        <td>{{ nutrition.total_fat | default: 0 }}g</td>
+        {% if nutrition.serving_size %}<td>{{ nutrition.total_fat_serving | default: '-' }}g</td>{% endif %}
+      </tr>
+      <tr>
+        <td class="safeserve-nutrition__indent">of which saturates</td>
+        <td>{{ nutrition.saturated_fat | default: 0 }}g</td>
+        {% if nutrition.serving_size %}<td>{{ nutrition.saturated_fat_serving | default: '-' }}g</td>{% endif %}
+      </tr>
+      <tr>
+        <td><strong>Carbohydrate</strong></td>
+        <td>{{ nutrition.total_carbohydrate | default: 0 }}g</td>
+        {% if nutrition.serving_size %}<td>{{ nutrition.total_carbohydrate_serving | default: '-' }}g</td>{% endif %}
+      </tr>
+      <tr>
+        <td class="safeserve-nutrition__indent">of which sugars</td>
+        <td>{{ nutrition.total_sugars | default: 0 }}g</td>
+        {% if nutrition.serving_size %}<td>{{ nutrition.total_sugars_serving | default: '-' }}g</td>{% endif %}
+      </tr>
+      {% if nutrition.dietary_fiber %}
+      <tr>
+        <td>Fibre</td>
+        <td>{{ nutrition.dietary_fiber }}g</td>
+        {% if nutrition.serving_size %}<td>{{ nutrition.dietary_fiber_serving | default: '-' }}g</td>{% endif %}
+      </tr>
+      {% endif %}
+      <tr>
+        <td><strong>Protein</strong></td>
+        <td>{{ nutrition.protein | default: 0 }}g</td>
+        {% if nutrition.serving_size %}<td>{{ nutrition.protein_serving | default: '-' }}g</td>{% endif %}
+      </tr>
+      <tr>
+        <td>Salt</td>
+        <td>{{ nutrition.salt | default: 0 }}g</td>
+        {% if nutrition.serving_size %}<td>{{ nutrition.salt_serving | default: '-' }}g</td>{% endif %}
+      </tr>
+    </tbody>
+  </table>
+</div>
+{% endif %}
+
+{% endif %}
+
+{% schema %}
+{
+  "name": "Nutrition Label",
+  "target": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "format",
+      "label": "Label format",
+      "options": [
+        { "value": "fda", "label": "FDA (US format)" },
+        { "value": "eu", "label": "EU format" }
+      ],
+      "default": "fda",
+      "info": "This overrides the per-product format setting."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_daily_values",
+      "label": "Show % Daily Values (FDA format only)",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Nutrition Label"
+    }
+  ]
+}
+{% endschema %}

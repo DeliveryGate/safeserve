@@ -1,0 +1,447 @@
+/* SafeServe — Allergen and Dietary Labels
+ * Version: 1.0.0
+ * Owner: SaltCore Group Limited
+ * April 2026
+ */
+
+/* ============================================
+   CSS Custom Properties
+   ============================================ */
+:root {
+  --safeserve-warning: #FF4444;
+  --safeserve-safe: #22C55E;
+  --safeserve-neutral: #6B7280;
+  --safeserve-bg: #FFFFFF;
+  --safeserve-border: #E5E7EB;
+  --safeserve-text: #111827;
+  --safeserve-text-muted: #6B7280;
+  --safeserve-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --safeserve-radius-pill: 9999px;
+  --safeserve-radius-square: 4px;
+  --safeserve-spacing: 8px;
+}
+
+/* ============================================
+   Allergen Badge Block
+   ============================================ */
+.safeserve-allergens {
+  font-family: var(--safeserve-font);
+  padding: 16px 0;
+  border-top: 1px solid var(--safeserve-border);
+  border-bottom: 1px solid var(--safeserve-border);
+  margin: 16px 0;
+}
+
+.safeserve-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--safeserve-text);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 12px 0;
+}
+
+.safeserve-badge-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+/* Badge base styles */
+.safeserve-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+  border: 1.5px solid transparent;
+  cursor: default;
+  white-space: nowrap;
+}
+
+/* Pill style (default) */
+.safeserve-badge-style--pill .safeserve-badge {
+  border-radius: var(--safeserve-radius-pill);
+}
+
+/* Square style */
+.safeserve-badge-style--square .safeserve-badge {
+  border-radius: var(--safeserve-radius-square);
+}
+
+/* Warning badge — contains allergen */
+.safeserve-badge--warning {
+  background-color: color-mix(in srgb, var(--safeserve-warning) 12%, transparent);
+  color: var(--safeserve-warning);
+  border-color: color-mix(in srgb, var(--safeserve-warning) 40%, transparent);
+}
+
+/* Safe badge — allergen free */
+.safeserve-badge--safe {
+  background-color: color-mix(in srgb, var(--safeserve-safe) 10%, transparent);
+  color: color-mix(in srgb, var(--safeserve-safe) 80%, #000000);
+  border-color: color-mix(in srgb, var(--safeserve-safe) 40%, transparent);
+}
+
+/* Fallback for browsers without color-mix */
+@supports not (color: color-mix(in srgb, red, blue)) {
+  .safeserve-badge--warning {
+    background-color: #FFF0F0;
+    color: #CC0000;
+    border-color: #FFB3B3;
+  }
+  .safeserve-badge--safe {
+    background-color: #F0FFF4;
+    color: #166534;
+    border-color: #86EFAC;
+  }
+}
+
+/* Dietary Certifications */
+.safeserve-dietary {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--safeserve-border);
+}
+
+.safeserve-dietary-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--safeserve-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 8px 0;
+}
+
+.safeserve-cert-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.safeserve-cert {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: var(--safeserve-radius-pill);
+  border: 1.5px solid;
+}
+
+.safeserve-cert--halal    { background: #EFF6FF; color: #1D4ED8; border-color: #BFDBFE; }
+.safeserve-cert--kosher   { background: #F5F3FF; color: #6D28D9; border-color: #DDD6FE; }
+.safeserve-cert--vegan    { background: #F0FDF4; color: #15803D; border-color: #BBF7D0; }
+.safeserve-cert--vegetarian { background: #ECFDF5; color: #065F46; border-color: #A7F3D0; }
+.safeserve-cert--gluten-free { background: #FFFBEB; color: #92400E; border-color: #FDE68A; }
+.safeserve-cert--nut-free { background: #FFF7ED; color: #9A3412; border-color: #FDBA74; }
+.safeserve-cert--dairy-free { background: #F0F9FF; color: #075985; border-color: #BAE6FD; }
+.safeserve-cert--keto     { background: #FDF4FF; color: #86198F; border-color: #E879F9; }
+
+/* Mobile — Allergen Badges */
+@media (max-width: 390px) {
+  .safeserve-badge-grid,
+  .safeserve-cert-grid {
+    gap: 4px;
+  }
+
+  .safeserve-badge,
+  .safeserve-cert {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+}
+
+/* ============================================
+   Nutrition Label — FDA Format
+   ============================================ */
+.safeserve-nutrition--fda {
+  font-family: var(--safeserve-font);
+  max-width: 280px;
+  border: 1px solid var(--safeserve-text);
+  padding: 6px 8px;
+  margin: 16px 0;
+  color: var(--safeserve-text);
+}
+
+.safeserve-nutrition--fda .safeserve-nutrition__title {
+  font-size: 32px;
+  font-weight: 900;
+  line-height: 1;
+  margin: 0 0 2px 0;
+  border-bottom: 8px solid var(--safeserve-text);
+  padding-bottom: 4px;
+}
+
+.safeserve-nutrition--fda .safeserve-nutrition__servings,
+.safeserve-nutrition--fda .safeserve-nutrition__serving-size {
+  font-size: 13px;
+  margin: 2px 0;
+}
+
+.safeserve-nutrition--fda .safeserve-nutrition__serving-size {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  border-bottom: 4px solid var(--safeserve-text);
+  padding-bottom: 4px;
+}
+
+.safeserve-nutrition--fda .safeserve-nutrition__calories-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 4px solid var(--safeserve-text);
+  padding: 4px 0;
+}
+
+.safeserve-nutrition--fda .safeserve-nutrition__calories-label {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.safeserve-nutrition--fda .safeserve-nutrition__calories-value {
+  font-size: 36px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.safeserve-nutrition--fda .safeserve-nutrition__dv-header {
+  font-size: 11px;
+  text-align: right;
+  margin: 2px 0;
+  font-weight: 400;
+}
+
+.safeserve-nutrition--fda .safeserve-nutrition__row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  padding: 2px 0;
+  border-bottom: 1px solid var(--safeserve-border);
+}
+
+.safeserve-nutrition--fda .safeserve-nutrition__row--bold {
+  font-weight: 700;
+}
+
+.safeserve-nutrition--fda .safeserve-nutrition__row--indent {
+  padding-left: 16px;
+}
+
+.safeserve-nutrition--fda .safeserve-nutrition__row--indent-2 {
+  padding-left: 32px;
+}
+
+.safeserve-nutrition__divider--thin {
+  height: 1px;
+  background: var(--safeserve-text);
+  margin: 2px 0;
+}
+
+.safeserve-nutrition__divider--thick {
+  height: 8px;
+  background: var(--safeserve-text);
+  margin: 4px 0;
+}
+
+.safeserve-nutrition--fda .safeserve-nutrition__micronutrients .safeserve-nutrition__row {
+  border-bottom: 1px solid var(--safeserve-border);
+}
+
+.safeserve-nutrition--fda .safeserve-nutrition__footnote {
+  font-size: 10px;
+  margin-top: 6px;
+  line-height: 1.4;
+  color: var(--safeserve-text-muted);
+}
+
+/* ============================================
+   Nutrition Label — EU Format
+   ============================================ */
+.safeserve-nutrition--eu {
+  font-family: var(--safeserve-font);
+  max-width: 360px;
+  margin: 16px 0;
+  border: 1px solid var(--safeserve-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.safeserve-nutrition--eu .safeserve-nutrition__title {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 8px 12px;
+  background: var(--safeserve-text);
+  color: var(--safeserve-bg);
+  margin: 0;
+}
+
+.safeserve-nutrition--eu .safeserve-nutrition__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.safeserve-nutrition--eu .safeserve-nutrition__table th {
+  background: #F3F4F6;
+  padding: 6px 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+  border-bottom: 1px solid var(--safeserve-border);
+}
+
+.safeserve-nutrition--eu .safeserve-nutrition__table th:not(:first-child) {
+  text-align: right;
+}
+
+.safeserve-nutrition--eu .safeserve-nutrition__table td {
+  padding: 5px 12px;
+  border-bottom: 1px solid var(--safeserve-border);
+  vertical-align: middle;
+}
+
+.safeserve-nutrition--eu .safeserve-nutrition__table td:not(:first-child) {
+  text-align: right;
+}
+
+.safeserve-nutrition--eu .safeserve-nutrition__table tr:last-child td {
+  border-bottom: none;
+}
+
+.safeserve-nutrition--eu .safeserve-nutrition__table .safeserve-nutrition__indent {
+  padding-left: 24px;
+  color: var(--safeserve-text-muted);
+  font-size: 12px;
+}
+
+.safeserve-nutrition--eu .safeserve-nutrition__table td strong {
+  font-weight: 700;
+}
+
+/* ============================================
+   Dietary Filter Block
+   ============================================ */
+.safeserve-filter {
+  font-family: var(--safeserve-font);
+  margin: 16px 0 24px;
+}
+
+.safeserve-filter__bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.safeserve-filter__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--safeserve-text);
+  background: var(--safeserve-bg);
+  border: 1.5px solid var(--safeserve-border);
+  border-radius: var(--safeserve-radius-pill);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.safeserve-filter__btn:hover {
+  border-color: var(--safeserve-safe);
+  color: color-mix(in srgb, var(--safeserve-safe) 80%, #000000);
+}
+
+.safeserve-filter__btn--active {
+  background: var(--safeserve-safe);
+  border-color: var(--safeserve-safe);
+  color: #FFFFFF;
+}
+
+.safeserve-filter__btn--active:hover {
+  background: color-mix(in srgb, var(--safeserve-safe) 90%, #000000);
+  border-color: color-mix(in srgb, var(--safeserve-safe) 90%, #000000);
+  color: #FFFFFF;
+}
+
+.safeserve-filter__no-results {
+  font-size: 14px;
+  color: var(--safeserve-text-muted);
+  margin-top: 16px;
+  text-align: center;
+  padding: 24px;
+  border: 1px dashed var(--safeserve-border);
+  border-radius: 8px;
+}
+
+/* Mobile filter — horizontal scroll */
+@media (max-width: 600px) {
+  .safeserve-filter__bar {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 4px;
+    gap: 6px;
+  }
+
+  .safeserve-filter__bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .safeserve-filter__btn {
+    flex-shrink: 0;
+    padding: 7px 14px;
+    font-size: 12px;
+  }
+}
+
+/* ============================================
+   Print Styles — Nutrition Label
+   ============================================ */
+@media print {
+  .safeserve-filter { display: none; }
+
+  .safeserve-nutrition--fda,
+  .safeserve-nutrition--eu {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    border-color: #000;
+    color: #000;
+  }
+
+  .safeserve-nutrition--fda .safeserve-nutrition__title {
+    border-bottom-color: #000;
+  }
+
+  .safeserve-nutrition--fda .safeserve-nutrition__calories-bar,
+  .safeserve-nutrition--fda .safeserve-nutrition__serving-size {
+    border-bottom-color: #000;
+  }
+
+  .safeserve-nutrition__divider--thick {
+    background: #000;
+  }
+
+  .safeserve-badge--warning {
+    background: #FFE5E5 !important;
+    color: #CC0000 !important;
+    border-color: #FF9999 !important;
+  }
+
+  .safeserve-badge--safe {
+    background: #E5FFE5 !important;
+    color: #006600 !important;
+    border-color: #99FF99 !important;
+  }
+}

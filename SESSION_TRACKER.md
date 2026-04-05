@@ -9,7 +9,7 @@
 | Session | Description                          | Status    | Date Completed |
 |---------|--------------------------------------|-----------|----------------|
 | 1 of 2  | Core Extension Build (Theme + Assets) | COMPLETE  | 2026-04-05     |
-| 2 of 2  | Admin Dashboard + Billing             | PENDING   | —              |
+| 2 of 2  | Admin Dashboard + Billing             | COMPLETE  | 2026-04-05     |
 
 ## APP 2: DELIVERYIQ — DATE, POSTCODE AND DELIVERY FEE
 
@@ -34,4 +34,4 @@
 
 ---
 
-## NEXT SESSION TO BUILD: App 1, Session 2 — Admin Dashboard + Billing
+## NEXT SESSION TO BUILD: App 2, Session 1 — Checkout UI Extension + Functions

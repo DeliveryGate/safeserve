@@ -11,7 +11,7 @@ RUN npm install --production
 
 # Copy and install web dependencies (includes @prisma/client)
 COPY safeserve/web/package*.json ./web/
-RUN cd web && npm install --production
+RUN cd web && npm install
 
 # Copy Prisma schema and generate client INTO web/node_modules
 # (web/index.js imports from web/node_modules/@prisma/client)

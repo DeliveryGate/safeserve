@@ -2,7 +2,7 @@
 
 client_id = "d3d0016d8e16512169eab7de8118e321"
 name = "SafeServe - Allergen Labels"
-application_url = "https://shopify.dev/apps/default-app-home"
+application_url = "https://safeserve-production.up.railway.app"
 embedded = true
 
 [build]
@@ -16,4 +16,4 @@ api_version = "2026-07"
 scopes = "read_products,write_products"
 
 [auth]
-redirect_urls = [ "https://shopify.dev/apps/default-app-home/api/auth" ]
+redirect_urls = [ "https://safeserve-production.up.railway.app/api/auth" ]
